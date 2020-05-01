@@ -12,9 +12,30 @@ string = input()
 if k > n * 2:
     print(-1)
 '''
+'''
+# 입력 문자열의 각 문자 비용 출력 코드
+tempdic = {}
+for s in string:
+    tempdic[s] = distance[alphabet.find(s)]
+else:
+    print(tempdic)
+'''
+
+'''
+# 입력 문자열의 조정해야 하는 구멍 개수 출력 코드
 holecount = 0
 for s in string:
     holecount += holes.get(s)
 else:
     deltahole = k - holecount
     print(deltahole)
+'''
+'''
+zlEna
+
+z+1:1, z+2:3
+l+1:5, l+2:31
+E+1:1, E+2:46
+n+1:1, n+2:27
+a-1:-3, a+1:1
+'''
