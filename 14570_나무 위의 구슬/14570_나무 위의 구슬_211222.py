@@ -1,43 +1,43 @@
-import sys
-from collections import defaultdict
+# import sys
+# from collections import defaultdict
 
 
-N = int(input())
-case_in = sys.stdin.read().rstrip()
-case_in = case_in.split('\n')
-edges, K = case_in[:-1], int(case_in[-1])
+# N = int(input())
+# case_in = sys.stdin.read().rstrip()
+# case_in = case_in.split('\n')
+# edges, K = case_in[:-1], int(case_in[-1])
 
-graph_data = defaultdict(list)
-root_node = 1
-for i, edge in enumerate(edges):
-    node_current = i + 1
-    U, V = map(int, edge.split())
-    graph_data[node_current] = [U, V]
+# graph_data = defaultdict(list)
+# root_node = 1
+# for i, edge in enumerate(edges):
+#     node_current = i + 1
+#     U, V = map(int, edge.split())
+#     graph_data[node_current] = [U, V]
 
-def navigator(K: int): # yields bits of K(starting from lower) and yields 0 indefinitely
-    while K != 0:
-        yield K % 2
-        K //= 2
-    while True:
-        yield 0
+# def navigator(K: int): # yields bits of K(starting from lower) and yields 0 indefinitely
+#     while K != 0:
+#         yield K % 2
+#         K //= 2
+#     while True:
+#         yield 0
 
-pathfinder = navigator(K-1) # bit sequence of K-1 is the navigator to determine left or right while desending binary tree
-node_current_id = root_node
-while True:
-    node_child = graph_data[node_current_id]
-    left, right = node_child
-    if left == -1 and right == -1: # leaf, destination arrived
-        break
-    elif left == -1 or right == -1: # only one child, no need of pathfinding
-        node_current_id = left if left != -1 else right
-        continue
-    else: # two children
-        if next(pathfinder) == 0:
-            node_current_id = node_child[0]
-        else: # pathfinder == 1
-            node_current_id = node_child[1]
+# pathfinder = navigator(K-1) # bit sequence of K-1 is the navigator to determine left or right while desending binary tree
+# node_current_id = root_node
+# while True:
+#     node_child = graph_data[node_current_id]
+#     left, right = node_child
+#     if left == -1 and right == -1: # leaf, destination arrived
+#         break
+#     elif left == -1 or right == -1: # only one child, no need of pathfinding
+#         node_current_id = left if left != -1 else right
+#         continue
+#     else: # two children
+#         if next(pathfinder) == 0:
+#             node_current_id = node_child[0]
+#         else: # pathfinder == 1
+#             node_current_id = node_child[1]
 
-print(node_current_id)
+# print(node_current_id)
 
 '''
 13
@@ -60,3 +60,43 @@ print(node_current_id)
 K =  1,  2,  3, 4,  5
 ac = 12, 10, 9, 11, 13
 '''
+
+import sys
+from collections import defaultdict
+
+
+N = int(input())
+case_in = sys.stdin.read().rstrip()
+case_in = case_in.split('\n')
+edges, K = case_in[:-1], int(case_in[-1])
+
+graph_data = [-1, -1] * (N+1)
+root_node = 1
+for i, edge in enumerate(edges):
+    i += 1
+    U, V = map(int, edge.split())
+    graph_data[2*i], graph_data[2*i + 1] = U, V
+
+def navigator(K: int): # yields bits of K(starting from lower) and yields 0 indefinitely
+    while K != 0:
+        yield K % 2
+        K //= 2
+    while True:
+        yield 0
+
+pathfinder = navigator(K-1) # bit sequence of K-1 is the navigator to determine left or right while desending binary tree
+node_current_id = root_node
+while True:
+    left, right = graph_data[2*node_current_id], graph_data[2*node_current_id + 1]
+    if left == -1 and right == -1: # leaf, destination arrived
+        break
+    elif left == -1 or right == -1: # only one child, no need of pathfinding
+        node_current_id = left if left != -1 else right
+        continue
+    else: # two children
+        if next(pathfinder) == 0:
+            node_current_id = left
+        else: # pathfinder == 1
+            node_current_id = right
+
+print(node_current_id)
