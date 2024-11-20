@@ -14,13 +14,8 @@ def solution(stones: tuple[int, ...]):
     diff = abs(left - right)
     counter = 0
     for weight in [100, 50, 20, 10, 5, 2, 1]:  # greedy
-        while True:
-            diff -= weight
-            counter += 1
-            if diff < 0:
-                diff += weight
-                counter -= 1
-                break
+        count, diff = divmod(diff, weight)
+        counter += count
 
     return counter
 
